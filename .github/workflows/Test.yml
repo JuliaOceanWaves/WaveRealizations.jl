@@ -41,4 +41,4 @@ jobs:
         with:
           file: lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: JuliaOceanWaves/RepoTemplate.jl
+          slug: JuliaOceanWaves/WaveRealizations.jl

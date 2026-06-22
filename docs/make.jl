@@ -1,19 +1,24 @@
 using Documenter
-using RepoTemplate
+using WaveRealizations
 
-DocMeta.setdocmeta!(RepoTemplate, :DocTestSetup, :(using RepoTemplate); recursive=true)
+DocMeta.setdocmeta!(
+    WaveRealizations,
+    :DocTestSetup,
+    :(using WaveRealizations);
+    recursive = true
+)
 
 makedocs(
-    sitename="RepoTemplate.jl",
-    modules=[RepoTemplate],
-    format=Documenter.HTML(prettyurls=get(ENV, "CI", "false") == "true"),
-    pages=[
-        "Home" => "index.md",
-    ],
+    sitename = "WaveRealizations.jl",
+    modules = [WaveRealizations],
+    format = Documenter.HTML(prettyurls = get(ENV, "CI", "false") == "true"),
+    pages = [
+        "Home" => "index.md"
+    ]
 )
 
 deploydocs(
-    repo="github.com/JuliaOceanWaves/RepoTemplate.jl.git",
-    devbranch="main",
-    push_preview=true
+    repo = "github.com/JuliaOceanWaves/WaveRealizations.jl.git",
+    devbranch = "main",
+    push_preview = true
 )

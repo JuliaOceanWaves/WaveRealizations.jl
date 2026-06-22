@@ -1,3 +1,2 @@
 # .JuliaFormatter.toml
 style = "sciml"
-ignore = ["examples"]

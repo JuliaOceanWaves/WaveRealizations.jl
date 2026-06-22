@@ -1,18 +1,11 @@
-# RepoTemplate.jl
+# WaveRealizations.jl
 
-Tiny placeholder documentation for the RepoTemplate.jl package.
+Create wave surfaces and time series from a given wave elevation variance spectrum.
 
-## Quick Start
-
-```julia
-using RepoTemplate
-
-greet()
-greet("Julia")
-```
-
-## API
+## Public API
 
 ```@autodocs
-Modules = [RepoTemplate]
+Modules = [WaveRealizations]
+Private = false
+Order = [Type, Function]
 ```

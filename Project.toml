@@ -1,11 +1,28 @@
-name = "RepoTemplate"
-uuid = "11232d54-3016-4358-b84a-93d6a906121d"
+name = "WaveRealizations"
+uuid = "5852f853-8e1a-48ca-b35a-a3df028de464"
 authors = ["Sandia National Laboratories"]
 version = "0.1.0"
 
 [deps]
-# uuids here
+AxisArrays = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+TimeSeries = "9e3dc215-6440-5c97-bce1-76c03772f85e"
+Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+WaveSpectra = "9da5bd80-4f3d-48a2-a37e-447dff2ef7bc"
+
+[weakdeps]
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+
+[extensions]
+WaveRealizationsPlotsExt = "Plots"
 
 [compat]
-# versions here
+AxisArrays = "0.4"
+FFTW = "1"
+Plots = "1"
+TimeSeries = "0.26"
+Unitful = "1"
+WaveSpectra = "0.2"
 julia = "1.10"

@@ -1,32 +1,33 @@
-# RepoTemplate.jl
+# WaveRealizations.jl
 
-[![CI](https://github.com/JuliaOceanWaves/RepoTemplate.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaOceanWaves/RepoTemplate.jl/actions/workflows/CI.yml)
-[![Docs](https://github.com/JuliaOceanWaves/RepoTemplate.jl/actions/workflows/Docs.yml/badge.svg)](https://github.com/JuliaOceanWaves/RepoTemplate.jl/actions/workflows/Docs.yml)
-[![Coverage](https://codecov.io/gh/JuliaOceanWaves/RepoTemplate.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaOceanWaves/RepoTemplate.jl)
+[![Test](https://github.com/JuliaOceanWaves/WaveRealizations.jl/actions/workflows/Test.yml/badge.svg)](https://github.com/JuliaOceanWaves/WaveRealizations.jl/actions/workflows/Test.yml)
+[![Docs](https://github.com/JuliaOceanWaves/WaveRealizations.jl/actions/workflows/Documentation.yml/badge.svg)](https://github.com/JuliaOceanWaves/WaveRealizations.jl/actions/workflows/Documentation.yml)
+[![Coverage](https://codecov.io/gh/JuliaOceanWaves/WaveRealizations.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaOceanWaves/WaveRealizations.jl)
 
-Tiny placeholder package used as a JuliaOceanWaves package template.
+Generate wave realizations from wave elevation variance spectra.
 
 ## Installation
 
 ```julia
 using Pkg
-Pkg.add("RepoTemplate")
+Pkg.add("WaveRealizations")
 ```
 
 ## Usage
 
 ```julia
-using RepoTemplate
+using WaveRealizations
+using WaveSpectra
 
-greet()
-greet("Julia")
+spectrum = OmnidirectionalSpectrum([1.0, 0.25] .* (m^2 / Hz), [0.1, 0.2] .* Hz)
+amplitudes = ComplexAmplitudes(spectrum)
 ```
 
 ## Development
 
 ```julia
 using Pkg
-Pkg.test("RepoTemplate")
+Pkg.test("WaveRealizations")
 ```
 
 ## License

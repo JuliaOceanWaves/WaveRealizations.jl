@@ -1,4 +1,4 @@
 using Documenter
 using Test
-using RepoTemplate
-doctest(RepoTemplate)
+using WaveRealizations
+doctest(WaveRealizations)
