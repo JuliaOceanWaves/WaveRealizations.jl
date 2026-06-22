@@ -1,17 +1,10 @@
 using Documenter
 using WaveRealizations
 
-DocMeta.setdocmeta!(
-    WaveRealizations,
-    :DocTestSetup,
-    :(using WaveRealizations);
-    recursive = true
-)
-
 makedocs(
     sitename = "WaveRealizations.jl",
     modules = [WaveRealizations],
-    format = Documenter.HTML(prettyurls = get(ENV, "CI", "false") == "true"),
+    format = Documenter.HTML(),
     pages = [
         "Home" => "index.md"
     ]
@@ -19,6 +12,5 @@ makedocs(
 
 deploydocs(
     repo = "github.com/JuliaOceanWaves/WaveRealizations.jl.git",
-    devbranch = "main",
-    push_preview = true
-)
+    push_preview = true,
+    versions = ["latest" => "v^", "v#"])

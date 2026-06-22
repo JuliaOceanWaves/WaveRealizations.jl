@@ -6,6 +6,4 @@ Create wave surfaces and time series from a given wave elevation variance spectr
 
 ```@autodocs
 Modules = [WaveRealizations]
-Private = false
-Order = [Type, Function]
 ```
