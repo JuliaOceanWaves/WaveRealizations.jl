@@ -1,19 +1,17 @@
 # discrete surfaces using FFT
-using FFTW: ifft, irfft
-using Unitful: ustrip
-
 """
     fft_surface(amplitudes::ComplexAmplitudes)
 
 Generate a realization on the natural FFT grid.
 
 Polar amplitudes must have one direction and an evenly spaced one-sided frequency or
-wavenumber axis starting at the first positive FFT frequency. Spatial polar amplitudes
-must point along positive x or positive y.
+wavenumber axis starting at the first positive FFT frequency.
+Spatial polar amplitudes must point along positive x or positive y.
 
 Cartesian amplitudes must be spatial, use full signed FFT wavenumber grids, and already
-be Hermitian. A positive-quadrant Cartesian grid is insufficient because its missing
-directional quadrants cannot be inferred.
+be Hermitian.
+A positive-quadrant Cartesian grid is insufficient because its missing directional quadrants
+cannot be inferred.
 """
 function fft_surface(amplitudes::ComplexAmplitudes)
     return ispolar(amplitudes) ? _fft_surface_polar(amplitudes) :

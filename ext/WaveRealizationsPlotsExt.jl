@@ -90,9 +90,11 @@ function surface_gif(surface::WaveSurface, filename = "surface.gif";
     return Plots.gif(animation, filename; fps = frame_rate)
 end
 
-_check_single_time(surface::WaveSurface) =
-    length(surface.time) == 1 ||
-    throw(ArgumentError("Select one frame by indexing the surface before plotting."))
+function _check_single_time(surface::WaveSurface)
+    if length(surface.time) != 1
+        throw(ArgumentError("Select one frame by indexing the surface before plotting."))
+    end
+end
 
 function _axis_label(name, values)
     value_unit = unit(eltype(values))

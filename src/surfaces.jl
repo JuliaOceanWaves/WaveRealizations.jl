@@ -51,52 +51,11 @@ Base.IndexStyle(::Type{<:WaveSurface}) = IndexCartesian()
 Base.parent(x::WaveSurface) = x.data
 Base.copy(x::WaveSurface) = WaveSurface(copy(x.data), copy(x.x), copy(x.y), copy(x.time))
 
-"""
-    TimeArray(surface::WaveSurface; start=DateTime(0))
-
-Convert a `WaveSurface` at a single spatial point to a `TimeArray` of surface elevation.
-The relative surface time axis is added to `start`.
-"""
-function TimeArray(surface::WaveSurface; start = DateTime(0))
-    (length(surface.x) == 1 && length(surface.y) == 1) ||
-        throw(ArgumentError("TimeArray conversion requires singleton x and y axes."))
-    return _time_array(surface, start .+ float.(surface.time))
-end
-
-"""
-    TimeArray(amplitudes::ComplexAmplitudes, time; start=DateTime(0), dispersion=periodic)
-
-Evaluate `amplitudes` at a single spatial point and return the resulting surface
-elevation as a `TimeArray`.
-
-Unitful relative times are added to `start`. A vector of `Dates.TimeType` values, such
-as `Date`, `DateTime`, or `Time`, is preserved as the `TimeArray` timestamp axis and
-evaluated using elapsed time from its first value.
-"""
-function TimeArray(amplitudes::ComplexAmplitudes, time::AbstractVector;
-        start = DateTime(0),
-        dispersion = periodic)
-    return TimeArray(WaveSurface(amplitudes; time, dispersion); start)
-end
-
-function TimeArray(amplitudes::ComplexAmplitudes, time::AbstractVector{<:TimeType};
-        dispersion = periodic)
-    isempty(time) && throw(ArgumentError("The time axis cannot be empty."))
-    surface = WaveSurface(amplitudes; time = _elapsed_time(time), dispersion)
-    return _time_array(surface, time)
-end
-
-_time_array(surface::WaveSurface, timestamps) =
-    TimeArray(timestamps, vec(surface.data), [:elevation])
-
-_elapsed_time(time::AbstractVector{<:TimeType}) =
-    [value(Nanosecond(t - first(time))) * 1e-9s for t in time]
-
+# AxisArrays
 AxisArrays.axes(x::WaveSurface) = (x.x, x.y, x.time)
-AxisArrays.axisvalues(x::WaveSurface) = (x.x, x.y, x.time)
+axisvalues(x::WaveSurface) = (x.x, x.y, x.time)
 
-# indexing
-function AxisArrays.AxisArray(x::WaveSurface)
+function AxisArray(x::WaveSurface)
     return AxisArrays.AxisArray(
         x.data,
         AxisArrays.Axis{:x}(x.x),
@@ -110,10 +69,31 @@ function WaveSurface(x::AxisArrays.AxisArray)
     return WaveSurface(x.data, x_axis, y_axis, time_axis)
 end
 
-Base.getindex(x::WaveSurface, i::Int) =
-    getindex(x, Tuple(CartesianIndices(size(x))[i])...)
+# indexing
+Base.getindex(x::WaveSurface, i::Int) = getindex(x, Tuple(CartesianIndices(size(x))[i])...)
 Base.getindex(x::WaveSurface, i::CartesianIndex) = getindex(x, Tuple(i)...)
 Base.getindex(x::WaveSurface, ::Colon) = getindex(x, :, :, :)
+
+@inline _axis_selector(axis, x::Integer) = x:x
+@inline function _axis_selector(axis, x::Number)
+    indices = findall(axis_value -> isapprox(axis_value, x), axis)
+    isempty(indices) && throw(BoundsError(axis, x))
+    length(indices) == 1 ||
+        throw(ArgumentError("multiple axis coordinates are approximately equal to $x"))
+    return only(indices):only(indices)
+end
+@inline _axis_selector(axis, x) = x
+@inline _axis_selectors(axes,
+    I...) = ntuple(
+    index -> index <= length(I) ? _axis_selector(axes[index], I[index]) : Colon(),
+    length(axes))
+
+@inline function _axis_selector_kwargs(names, axes, kwargs)
+    axis_by_name = Dict(zip(names, axes))
+    return (;
+        (key => _axis_selector(axis_by_name[key], value) for
+    (key, value) in kwargs)...)
+end
 
 function Base.getindex(x::WaveSurface, I...)
     selection = getindex(AxisArrays.AxisArray(x), _axis_selectors(AxisArrays.axes(x), I...)...)
@@ -126,6 +106,7 @@ function Base.getindex(x::WaveSurface; kwargs...)
     return WaveSurface(selection)
 end
 
+# show
 function Base.show(io::IO, x::WaveSurface)
     shape = size(x)
     surface_unit = unit(eltype(x))
@@ -277,4 +258,48 @@ function _check_coordinate(x, domain::Symbol)
     valid || throw(DimensionMismatch(
         domain == :space ? "x and y must have length dimensions." :
         "time must have time dimensions."))
+end
+
+# Timeseries
+"""
+    TimeArray(surface::WaveSurface; start=DateTime(0))
+
+Convert a `WaveSurface` at a single spatial point to a `TimeArray` of surface elevation.
+The relative surface time axis is added to `start`.
+"""
+function TimeArray(surface::WaveSurface; start = DateTime(0))
+    (length(surface.x) == 1 && length(surface.y) == 1) ||
+        throw(ArgumentError("TimeArray conversion requires singleton x and y axes."))
+    return _time_array(surface, start .+ float.(surface.time))
+end
+
+"""
+    TimeArray(amplitudes::ComplexAmplitudes, time; start=DateTime(0), dispersion=periodic)
+
+Evaluate `amplitudes` at a single spatial point and return the resulting surface
+elevation as a `TimeArray`.
+
+Unitful relative times are added to `start`. A vector of `Dates.TimeType` values, such
+as `Date`, `DateTime`, or `Time`, is preserved as the `TimeArray` timestamp axis and
+evaluated using elapsed time from its first value.
+"""
+function TimeArray(amplitudes::ComplexAmplitudes, time::AbstractVector;
+        start = DateTime(0),
+        dispersion = periodic)
+    return TimeArray(WaveSurface(amplitudes; time, dispersion); start)
+end
+
+function TimeArray(amplitudes::ComplexAmplitudes, time::AbstractVector{<:TimeType};
+        dispersion = periodic)
+    isempty(time) && throw(ArgumentError("The time axis cannot be empty."))
+    surface = WaveSurface(amplitudes; time = _elapsed_time(time), dispersion)
+    return _time_array(surface, time)
+end
+
+function _time_array(surface::WaveSurface, timestamps)
+    TimeArray(timestamps, vec(surface.data), [:elevation])
+end
+
+function _elapsed_time(time::AbstractVector{<:TimeType})
+    [value(Nanosecond(t - first(time))) * 1e-9s for t in time]
 end

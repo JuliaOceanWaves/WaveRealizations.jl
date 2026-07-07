@@ -37,10 +37,7 @@ let
     @test occursin(":direction: [90°]", plain)
     @test occursin("and data:", plain)
 
-    selection = amplitudes[2, 1]
-    @test selection isa ComplexAmplitudes
-    @test size(selection) == (1, 1)
-    @test axisvalues(selection) == ([2Hz], [90°])
+    @test amplitudes[2, 1] == amplitudes.data[2, 1]
 
     selection = amplitudes[frequency = 1Hz .. 2Hz, direction = 90°]
     @test selection isa ComplexAmplitudes

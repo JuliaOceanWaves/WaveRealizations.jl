@@ -9,24 +9,26 @@ The input spectra types are from `WaveSpectra.jl`.
 """
 module WaveRealizations
 
-using WaveSpectra: AbstractOmnidirectionalSpectrum, AbstractSpectrum, Spectrum, isdirection,
-                   isevenlyspaced, m, periodic, rad, s, uconvert, °
+using SpectralSuperpositions: AbstractSuperposition, coordinates, iscartesian, isdirection,
+                              isevenlyspaced, ispolar, isspatial, istemporal,
+                              validate_superposition, _show_axis, (..)
+using WaveSpectra: AbstractOmnidirectionalSpectrum, AbstractSpectrum, m, periodic, rad, s,
+                   uconvert, °
 using Unitful: eltype, ustrip, NoUnits
 using Random: AbstractRNG, default_rng
-using AxisArrays: axisvalues
 using Dates: DateTime, Nanosecond, TimeType, value
-using TimeSeries: TimeArray
+using FFTW: ifft, irfft
 
-import AxisArrays # axes # in the future, do `import AxisArrays: axes as AAaxes`
+import AxisArrays: AxisArrays, AxisArray, axisvalues # axes # in the future, do `import AxisArrays: axes as AAaxes`
 const axes = Base.axes # name conflict will be fixed by AxisArrays in the future
-import WaveSpectra: axesnames, axestypes, coordinates, iscartesian, ispolar, isspatial,
-                    istemporal
 import Unitful: unit
+import SpectralSuperpositions: superposition_unit_aliases
+import TimeSeries: TimeArray
 
 function surface_gif end
 
-export ComplexAmplitudes, equal_energy_bins, fft_surface, isspatial, istemporal,
-       surface_function, surface_gif, WaveSurface
+export ComplexAmplitudes, WaveSurface, equal_energy_bins, fft_surface, isspatial,
+       istemporal, surface_function, surface_gif, (..)
 
 include("complex_amplitudes.jl")
 include("equal_energy_bins.jl")
