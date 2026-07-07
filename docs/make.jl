@@ -1,7 +1,7 @@
 using Documenter
 using WaveRealizations
 
-DocMeta.setdocmeta!(SpectralSuperpositions, :DocTestSetup, :(using SpectralSuperpositions); recursive = true)
+DocMeta.setdocmeta!(WaveRealizations, :DocTestSetup, :(using WaveRealizations); recursive = true)
 #bib = CitationBibliography(joinpath(@__DIR__, "references.bib"))
 
 makedocs(
@@ -10,7 +10,7 @@ makedocs(
         prettyurls = get(ENV, "CI", "false") == "true",
         assets = String["src/index.css"]
     ),
-    modules = [SpectralSuperpositions],
+    modules = [WaveRealizations],
     pages = ["Home" => "index.md",
             "API" => "api.md"]    #plugins = [bib],
 )
