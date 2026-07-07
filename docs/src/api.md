@@ -1,0 +1,7 @@
+# API
+
+```@autodocs
+Modules = [
+    WaveRealizations
+    ]
+```
