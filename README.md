@@ -23,6 +23,8 @@ spectrum = OmnidirectionalSpectrum([1.0, 0.25] .* (m^2 / Hz), [0.1, 0.2] .* Hz)
 amplitudes = ComplexAmplitudes(spectrum)
 ```
 
+![readme_surface_gif](./docs/src/assets/docs_surface.gif)
+
 ## Development
 
 ```julia

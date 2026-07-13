@@ -2,8 +2,8 @@
 
 Create wave surfaces and time series from a given wave elevation variance spectrum.
 
-## Public API
+![docs_surface_gif](./assets/docs_surface.gif)
 
-```@autodocs
-Modules = [WaveRealizations]
-```
+## [Quickstart](@ref quickstart)
+
+## [Public API](@ref api)

@@ -12,6 +12,7 @@ makedocs(
     ),
     modules = [WaveRealizations],
     pages = ["Home" => "index.md",
+            "Quickstart" => "quickstart.md",
             "API" => "api.md"]    #plugins = [bib],
 )
 
