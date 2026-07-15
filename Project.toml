@@ -22,6 +22,7 @@ WaveRealizationsPlotsExt = "Plots"
 
 [compat]
 AxisArrays = "0.4"
+DimensionfulAngles = "0.2.2"
 FFTW = "1"
 Plots = "1"
 SpectralSuperpositions = "0.1"
