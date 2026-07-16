@@ -10,9 +10,6 @@ using WaveRealizations
 
 let
     amplitudes = WaveRealizations._complex_amplitudes(MersenneTwister(1), [1.0, 4.0], :phase)
-    @test WaveSpectra.coordinates(amplitudes) == :polar
-    @test WaveSpectra.ispolar(amplitudes)
-    @test !WaveSpectra.iscartesian(amplitudes)
     @test size(amplitudes) == (2,)
     @test abs.(amplitudes) ≈ sqrt.([2.0, 8.0])
 end
@@ -26,6 +23,10 @@ let
     @test amplitudes.coordinates == :polar
     @test amplitudes.axestypes == (:frequency, :direction)
     @test amplitudes.axesnames == (:frequency, :direction)
+
+    @test WaveSpectra.coordinates(amplitudes) == :polar
+    @test WaveSpectra.ispolar(amplitudes)
+    @test !WaveSpectra.iscartesian(amplitudes)
 
     compact = sprint(show, amplitudes)
     @test compact == "2×1 ComplexAmplitudes{1}{Hz}{°}"
@@ -63,10 +64,11 @@ let
     kx = [-1, 1] .* (rad / m)
     ky = [-2, 0, 2] .* (rad / m)
     amplitudes = ComplexAmplitudes(ones(2, 3), kx, ky)
-    @test WaveSpectra.iscartesian(amplitudes)
+    
     @test amplitudes.coordinates == :cartesian
     @test amplitudes.axestypes == (:angular_wavenumber, :angular_wavenumber)
     @test amplitudes.axesnames == (:angular_wavenumber_1, :angular_wavenumber_2)
+    @test WaveSpectra.iscartesian(amplitudes)
 
     selection = amplitudes[angular_wavenumber_1 = -1rad / m,
         angular_wavenumber_2 = 0rad / m .. 2rad / m]
